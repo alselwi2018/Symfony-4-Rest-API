@@ -30,6 +30,7 @@ return [
     Doctrine\Bundle\DoctrineBundle\DoctrineBundle::class => ['all' => true],
     Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle::class => ['all' => true],
 ];
+?>
 # now go back to the terminal to add the entities that stores the resources into the database I will use the flight ticketing type
 # create the database first by typing
 php bin/console doctrine:database:create
