@@ -44,6 +44,82 @@ php bin/console make:entity FlightTimes
 php bin/console make:migration
 php bin/console doctrine:migrations:migrate
 # After that create the form type to handle the get and post of REST API
+# Then open config->packages you will see fos_rest.yaml. add the following to it
+fos_rest:
+routing_loader: 
+default_format: json
+include_format: false 
+body_listener: true 
+format_listener: 
+rules: 
+- { path: '^/',priorities ['json'], fallback_format: json, prefer_extension: false }
+param_fetcher_listener: true
+access_denied_listener: 
+json: true
+view: 
+view_response_listener: 'force' 
+formats: 
+json: true
+# open config->services.yaml and add the following
+Sensio_framework_extra.view.listener:
+    alias: Sensio\Bundle\FrameworkExtraBundle\EventListener\TemplateListener
+#To solve the issue with sensio_framework_extra you need to add it at config->services.yaml and then add the Sensio_framework_extra.view.listener: under service: with indent then it should work
+#add the controller from the terminal or command if you use windows 
+#in my FlightTimeController looks like this below
+<?php
+
+namespace App\Controller;
+
+use App\Entity\FlightTimes;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
+use FOS\RestBundle\Controller\FOSRestController;
+use FOS\RestBundle\Controller\Annotations as Rest;
+
+/**
+ * Class FlightTimesController
+ * @package App\Controller
+ * @Route("/api_flight", name="api_flight_")
+ */
+class FlightTimesController extends FOSRestController
+{
+    /**
+     * Loads all flight times
+     * @Rest\Get("/flight/times")
+     * @return Response
+     */
+    public function load_all_flights()
+    {
+        $flights = $this->getDoctrine()->getRepository(FlightTimes::class)->findAll();
+
+        return $this->handleView($this->view($flights));
+
+    }
+    /**
+     * Add new flight details
+     * @Rest\Post("/flight/time")
+     * @return Response
+     */
+    public function new_flight(Request $request){
+        $flight = new FlightTimes();
+        $form = $this->createForm(FlightTimes::class, $flight);
+        $data = json_decode($request->getContent(), true);
+        $form->submit($data);
+        if($form->isSubmitted() && $form->isValid()){
+            $entity_manager = $this->getDoctrine()->getManager();
+            $entity_manager->persist($flight);
+            $entity_manager->flush();
+            return $this->handleView($this->view(['status'=>'ok'], Response::HTTP_CREATED));
+        }
+        return $this->handleView($this->view($form->getErrors()));
+    }
+}
+
+# in my controller I have two routes for get and post rest api which are /rest/api/flights to get all flights and /rest/api/flight to post new data
+# then install postman from https://www.getpostman.com 
+# in postman you can test the result with post it shows status ok to send data to the entity and for loading all the api use get
 
 
 
