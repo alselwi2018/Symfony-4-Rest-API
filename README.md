@@ -117,7 +117,7 @@ class FlightTimesController extends FOSRestController
         return $this->handleView($this->view($form->getErrors()));
     }
 }
-
+?>
 # in my controller I have two routes for get and post rest api which are /rest/api/flights to get all flights and /rest/api/flight to post new data
 # then install postman from https://www.getpostman.com 
 # in postman you can test the result with post it shows status ok to send data to the entity and for loading all the api use get
