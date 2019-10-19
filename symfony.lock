@@ -280,9 +280,12 @@
     "symfony/process": {
         "version": "v4.3.5"
     },
+<<<<<<< HEAD
     "symfony/property-access": {
         "version": "v4.3.5"
     },
+=======
+>>>>>>> origin/fos
     "symfony/routing": {
         "version": "4.2",
         "recipe": {
