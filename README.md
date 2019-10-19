@@ -63,9 +63,9 @@ json: true
 # open config->services.yaml and add the following
 Sensio_framework_extra.view.listener:
     alias: Sensio\Bundle\FrameworkExtraBundle\EventListener\TemplateListener
-#To solve the issue with sensio_framework_extra you need to add it at config->services.yaml and then add the Sensio_framework_extra.view.listener: under service: with indent then it should work
-#add the controller from the terminal or command if you use windows 
-#in my FlightTimeController looks like this below
+# To solve the issue with sensio_framework_extra you need to add it at config->services.yaml and then add the Sensio_framework_extra.view.listener: under service: with indent then it should work
+# add the controller from the terminal or command if you use windows 
+# in my FlightTimeController looks like this below
 <?php
 
 namespace App\Controller;
